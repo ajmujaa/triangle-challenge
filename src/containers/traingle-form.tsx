@@ -11,12 +11,22 @@ export const TriangleForm = () => {
 
   const submit = () => {
     const result = getTriangleType(+side1, +side2, +side3);
-	const { isSuccess, message } = result;
-	if(isSuccess) {
-		(window as any).ts.ui.Notification.success(message);
-	}else{
-		(window as any).ts.ui.Notification.error(message);
-	}
+    const { isSuccess, message } = result;
+    if (isSuccess) {
+      (window as any).ts &&
+        (window as any).ts.ui.Notification.success(message, {
+          onaccept: () => {
+            resetNote();
+          }
+        });
+    } else {
+      (window as any).ts &&
+        (window as any).ts.ui.Notification.error(message, {
+          onaccept: () => {
+            resetNote();
+          }
+        });
+    }
   };
 
   const handleSide1 = (value: string) => {
@@ -32,9 +42,9 @@ export const TriangleForm = () => {
   };
 
   const resetNote = () => {
-	  setSide1("0");
-	  setSide2("0");
-	  setSide3("0");
+    setSide1("0");
+    setSide2("0");
+    setSide3("0");
   };
 
   return (
@@ -43,21 +53,19 @@ export const TriangleForm = () => {
         label="Side 1"
         changeValue={handleSide1}
         value={side1}
-        resetNote={resetNote}
       ></TextField>
       <TextField
         label="Side 2"
         changeValue={handleSide2}
         value={side2}
-        resetNote={resetNote}
       ></TextField>
       <TextField
         label="Side 3"
         changeValue={handleSide3}
         value={side3}
-        resetNote={resetNote}
-      ></TextField>      
-      <Button label="Submit" submitAction={submit}></Button>
+      ></TextField>
+      <Button label="Submit" action={submit}></Button>
+      <Button label="Reset" action={resetNote}></Button>
     </form>
   );
 };
