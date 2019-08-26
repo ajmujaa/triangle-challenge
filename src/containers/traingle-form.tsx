@@ -2,18 +2,21 @@ import React, { useState } from "react";
 import { TextField } from "../components/textfield";
 import { Button } from "../components/button";
 import { getTriangleType } from "../triangle";
-import { FormNote } from "../components/form-note";
 import { isValidNumber } from "../lib";
 
 export const TriangleForm = () => {
   const [side1, setSide1] = useState("0");
   const [side2, setSide2] = useState("0");
   const [side3, setSide3] = useState("0");
-  const [note, setNote] = useState({ isSuccess: false, message: "" });
 
   const submit = () => {
     const result = getTriangleType(+side1, +side2, +side3);
-    setNote(result);
+	const { isSuccess, message } = result;
+	if(isSuccess) {
+		(window as any).ts.ui.Notification.success(message);
+	}else{
+		(window as any).ts.ui.Notification.error(message);
+	}
   };
 
   const handleSide1 = (value: string) => {
@@ -28,7 +31,11 @@ export const TriangleForm = () => {
     return isValidNumber(value) ? setSide3(value) : null;
   };
 
-  const resetNote = () => setNote({ isSuccess: false, message: "" });
+  const resetNote = () => {
+	  setSide1("0");
+	  setSide2("0");
+	  setSide3("0");
+  };
 
   return (
     <form data-ts="Form">
@@ -49,10 +56,7 @@ export const TriangleForm = () => {
         changeValue={handleSide3}
         value={side3}
         resetNote={resetNote}
-      ></TextField>
-      {note.message ? (
-        <FormNote isSuccess={note.isSuccess} message={note.message} />
-      ) : null}
+      ></TextField>      
       <Button label="Submit" submitAction={submit}></Button>
     </form>
   );
