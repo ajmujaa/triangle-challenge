@@ -14,18 +14,10 @@ export const TriangleForm = () => {
     const { isSuccess, message } = result;
     if (isSuccess) {
       (window as any).ts &&
-        (window as any).ts.ui.Notification.success(message, {
-          onaccept: () => {
-            resetNote();
-          }
-        });
+        (window as any).ts.ui.Notification.success(message);
     } else {
       (window as any).ts &&
-        (window as any).ts.ui.Notification.error(message, {
-          onaccept: () => {
-            resetNote();
-          }
-        });
+        (window as any).ts.ui.Notification.error(message);
     }
   };
 
