@@ -6,17 +6,19 @@ export default interface ITriangleResult {
 }
 
 export const getTriangleType = (
-  side1: number = 0,
-  side2: number = 0,
-  side3: number = 0
+  ...sides: Array<number>
 ): ITriangleResult => {
-  if (!isValidNumber(side1) || !isValidNumber(side2) || !isValidNumber(side3)) {
-    return result(false, ERROR_MESSAGES.ONLY_NUMBERS);
-  }
 
-  if (side1 <= 0 || side2 <= 0 || side3 <= 0) {
+  const has3Sides = sides.filter(side => side !== 0).length === 3;
+  if(!has3Sides) {
     return result(false, ERROR_MESSAGES.MISSING_SIDES);
   }
+ 
+  if(!sides.every(isValidNumber)) {
+    return result(false, ERROR_MESSAGES.ONLY_NUMBERS);
+  }
+  
+  const [side1, side2, side3] = sides;
 
   if (
     side1 + side2 <= side3 ||
